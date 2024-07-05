@@ -16,17 +16,15 @@
     <script src="quagga.min.js"></script>
 
     <script>
-
-        Quagga.init({
+Quagga.init({
     inputStream: {
         name: "Live",
         type: "LiveStream",
         target: document.querySelector('#camera'), // Elemento HTML onde o vídeo será exibido
-       constraints: {
-    width: { min: 240, ideal: 600, max: 800 }, // Largura mínima, ideal e máxima (para câmera horizontal)
-    height: { min: 80, ideal: 300, max: 480 }  // Altura mínima, ideal e máxima (para câmera horizontal)
-}
-
+        constraints: {
+            width: { min: 260, ideal: 640, max: 980 }, // Largura mínima, ideal e máxima
+            height: { min: 80, ideal: 280, max: 480 }  // Altura mínima, ideal e máxima
+        },
         singleChannel: false // Configura para escala de cinza se necessário
     },
     decoder: {
@@ -41,8 +39,7 @@
     Quagga.start();
 });
 
-
-    </script>
+     </script>
 
 </body>
 
