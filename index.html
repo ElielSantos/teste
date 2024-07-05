@@ -5,18 +5,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title> Ler Barcode </title>
+    <title>Read Barcode</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #camera {
+            width: 100%;
+            height: 300px;
+            border: 2px solid #ccc;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f8f8;
+        }
+
+        #resultado {
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+
+        #preview {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #f8f8f8;
+        }
+
+        #preview h3 {
+            margin-top: 0;
+        }
+
+        #preview p {
+            font-size: 18px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div id="resultado"></div>
-    <div id="camera"></div>
+    <div id="resultado">Barcode result will be displayed here</div>
+    <div id="camera">Camera feed will appear here</div>
+    <div id="preview">
+        <h3>Preview</h3>
+        <p>Detected Barcode: <span id="barcode-result">None</span></p>
+    </div>
 
     <script src="quagga.min.js"></script>
 
     <script>
-
         Quagga.init({
             inputStream: {
                 name: "Live",
@@ -29,7 +73,7 @@
         }, function (err) {
             if (err) {
                 console.log(err);
-                return
+                return;
             }
             console.log("Initialization finished. Ready to start");
             Quagga.start();
@@ -37,9 +81,11 @@
 
         Quagga.onDetected(function (data) {
             console.log(data.codeResult.code);
-            document.querySelector('#resultado').innerText = data.codeResult.code;
-        });
+            document.querySelector('#resultado').innerText = "Detected Barcode: " + data.codeResult.code;
 
+            // Update the preview section with the detected barcode
+            document.querySelector('#barcode-result').innerText = data.codeResult.code;
+        });
     </script>
 
 </body>
