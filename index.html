@@ -92,16 +92,14 @@
             text-align: left;
             margin-top: 50px; /* Example margin for spacing */
         }
-        #camera {
-    &::ng-deep video {
-        width: 100%;
-    }
-     ::ng-deep canvas {
-        position: absolute;
-        z-index: 1000;
-        right: 0;
-        width: 100%;
-    }
+        #camera video, canvas {
+  width: 100%;
+  height: auto;
+}
+
+#camera video.drawingBuffer, canvas.drawingBuffer {
+  display: none;
+
 }
          
     </style>
@@ -128,7 +126,7 @@
                         <h1>App</h1>
                         <p>Leitor de códico de barras</p>
                         <div id="resultado"></div>
-                        <div id="camera" style="width:300px;height:80px"></div>
+                        <div id="camera"></div>
                     </div>
                     </div>
                 </div>
