@@ -93,14 +93,7 @@
             text-align: left;
             margin-top: 50px; /* Example margin for spacing */
         }
-        #camera {
-            width: 300px; /* Largura desejada */
-            height: 80px; /* Altura desejada */
-            margin: 0 auto; /* Centraliza horizontalmente */
-            border: 2px solid #ccc; /* Borda (opcional) */
-            align-items: center;
-            justify-items: center;
-        }        
+         
     </style>
 </head>
 
@@ -133,11 +126,19 @@
         </div>
     </div>
 <script>
-        Quagga.init({
+     $(document).ready(function() {
+    // Ajusta dinamicamente a largura e altura do #camera
+    $('#camera').css({
+        width: '300px',
+        height: '80px'
+    });
+
+    // Inicializa Quagga.js
+    Quagga.init({
         inputStream: {
             name: "Live",
             type: "LiveStream",
-        target: document.querySelector('#camera')
+            target: document.querySelector('#camera')
         },
         decoder: {
             readers: ["code_128_reader"]
@@ -151,18 +152,19 @@
         Quagga.start();
     });
 
+    // Captura e exibe o código de barras detectado
     Quagga.onDetected(function (data) {
         console.log(data.codeResult.code);
         document.querySelector('#resultado').innerText = data.codeResult.code;
     });
-    $(document).ready(function() {
-            $("#menu-toggle").click(function(e) {
-                e.preventDefault();
-                $("#wrapper").toggleClass("menuDisplayed");
-            });
-        });
-        $('#camera').width(300);  // Define a largura para 300px
-        $('#camera').height(80);
+
+    // Toggle do menu sidebar
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("menuDisplayed");
+    });
+});
+      
 </script>
 </body>
 
