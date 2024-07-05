@@ -6,41 +6,164 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PCP</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="quagga.min.js"></script>
     <style>
-        /* Aqui você pode adicionar estilos adicionais, se necessário */
+        html {
+            font-size: 1.3rem; /* Aumenta o tamanho da fonte base para 130% */
+        }
+
+        body {
+            overflow-x: hidden; /* Impede rolagem horizontal */
+            margin: 0; /* Remove margens padrão do body */
+        }
+
+        /* Sidebar */
+        #sidebar-wrapper {
+            z-index: 1;
+            position: absolute;
+            width: 0;
+            height: 100%;
+            overflow-y: hidden;
+            background: #000000;
+            opacity: 0.9;
+            transition: all .5s;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Main Content */
+        #page-content-wrapper {
+            width: 100%;
+            position: absolute;
+            padding: 15px;
+            transition: all .5s;
+        }
+
+        #menu-toggle {
+            color: black;
+            border: none;
+            padding: 10px;
+            font-size: 1.5em;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #menu-toggle:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Change the width of the sidebar to display it */
+        #wrapper.menuDisplayed #sidebar-wrapper {
+            width: 250px;
+        }
+
+        #wrapper.menuDisplayed #page-content-wrapper {
+            padding-left: 250px;
+        }
+
+        /* Sidebar styling */
+        .sidebar-nav {
+            padding: 0;
+            list-style: none;
+            transition: all .5s;
+            width: 100%;
+            text-align: center;
+        }
+
+        .sidebar-nav li {
+            line-height: 40px;
+            width: 100%;
+            transition: all .3s;
+            padding: 10px;
+        }
+
+        .sidebar-nav li a {
+            display: block;
+            text-decoration: none;
+            color: #ddd;
+        }
+
+        .sidebar-nav li:hover {
+            background: #363636;
+        }
+        .container {
+            text-align: left;
+            margin-top: 50px; /* Example margin for spacing */
+        }
+        #camera {
+            width: 300px; /* Largura desejada */
+            height: 80px; /* Altura desejada */
+            margin: 0 auto; /* Centraliza horizontalmente */
+            border: 2px solid #ccc; /* Borda (opcional) */
+            align-items: center;
+            justify-items: center;
+        }        
     </style>
 </head>
 
 <body>
-    <div id="preview" style="width: 300px; height: 80px;"></div>
-
-    <script>
+    <div id="wrapper" class="menu-closed">
+        <!-- Sidebar -->
+       <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li><a href="./app.php">App</a></li>
+                <li><a href="#">Patrimônio</a></li>
+                <li><a href="./consulta.php">Consultar</a></li>
+                <li><a href="./admin.php">Administração</a></li>
+            </ul>
+        </div>
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button class="btn" id="menu-toggle"><span>&#9776;</span></button>
+                    <div class="container">
+                        <h1>App</h1>
+                        <p>Leitor de códico de barras</p>
+                        <div id="resultado"></div>
+                        <div id="camera" style="width:300px;height:80px"</div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
         Quagga.init({
-            inputStream: {
-                name: "Live",
-                type: "LiveStream",
-                target: document.querySelector('#preview')
-            },
-            decoder: {
-                readers: ["code_128_reader"]
-            }
-        }, function (err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            console.log("Inicialização concluída. Pronto para começar");
-            Quagga.start();
-        });
+        inputStream: {
+            name: "Live",
+            type: "LiveStream",
+        target: document.querySelector('#camera')
+        },
+        decoder: {
+            readers: ["code_128_reader"]
+        }
+    }, function(err) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log("Inicialização concluída. Pronto para começar");
+        Quagga.start();
+    });
 
-        Quagga.onDetected(function (data) {
-            console.log(data);
-            // Aqui você pode adicionar a lógica para lidar com os dados do código de barras detectado
+    Quagga.onDetected(function (data) {
+        console.log(data.codeResult.code);
+        document.querySelector('#resultado').innerText = data.codeResult.code;
+    });
+    $(document).ready(function() {
+            $("#menu-toggle").click(function(e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("menuDisplayed");
+            });
         });
-    </script>
+        $('#camera').width(300);  // Define a largura para 300px
+        $('#camera').height(80);
+</script>
 </body>
 
 </html>
