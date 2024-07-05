@@ -7,6 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title> Ler Barcode </title>
 </head>
+<style>
+    #camera {
+        width: 300px; /* Largura desejada */
+        height: 80px; /* Altura desejada */
+        margin: 0 auto; /* Centraliza horizontalmente */
+        border: 1px solid #ccc; /* Borda (opcional) */
+    }
+</style>
 
 <body>
 
@@ -16,30 +24,34 @@
     <script src="quagga.min.js"></script>
 
     <script>
-Quagga.init({
-    inputStream: {
-        name: "Live",
-        type: "LiveStream",
-        target: document.querySelector('#camera'), // Elemento HTML onde o vídeo será exibido
-        constraints: {
-            width: { min: 80, ideal: 80, max: 80 }, // Largura mínima, ideal e máxima
-            height: { min: 300, ideal: 300, max: 300 }  // Altura mínima, ideal e máxima
+    Quagga.init({
+        inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            target: document.querySelector('#camera'), // Elemento HTML onde o vídeo será exibido
+            constraints: {
+                width: { min: 300, ideal: 300, max: 300 }, // Largura mínima, ideal e máxima
+                height: { min: 80, ideal: 80, max: 80 }  // Altura mínima, ideal e máxima
+            },
+            singleChannel: false // Configura para escala de cinza se necessário
         },
-        singleChannel: false // Configura para escala de cinza se necessário
-    },
-    decoder: {
-        readers: ["code_128_reader"]
-    }
-}, function(err) {
-    if (err) {
-        console.log(err);
-        return;
-    }
-    console.log("Inicialização concluída. Pronto para começar");
-    Quagga.start();
-});
+        decoder: {
+            readers: ["code_128_reader"]
+        }
+    }, function(err) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log("Inicialização concluída. Pronto para começar");
+        Quagga.start();
+    });
 
-     </script>
+    Quagga.onDetected(function (data) {
+        console.log(data.codeResult.code);
+        document.querySelector('#resultado').innerText = data.codeResult.code;
+    });
+</script>
 
 </body>
 
