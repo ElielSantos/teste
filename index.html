@@ -93,6 +93,17 @@
             text-align: left;
             margin-top: 50px; /* Example margin for spacing */
         }
+        #barcode_scanner {
+    &::ng-deep video {
+        width: 100%;
+    }
+     ::ng-deep canvas {
+        position: absolute;
+        z-index: 1000;
+        right: 0;
+        width: 100%;
+    }
+}
          
     </style>
 </head>
@@ -126,13 +137,6 @@
         </div>
     </div>
 <script>
-     $(document).ready(function() {
-    // Ajusta dinamicamente a largura e altura do #camera
-    $('#camera').css({
-        width: '300px',
-        height: '80px'
-    });
-
     // Inicializa Quagga.js
     Quagga.init({
         inputStream: {
