@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Read Barcode</title>
+    <title>Leitor de Código de Barras</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,21 +18,23 @@
         }
 
         #camera {
-            width: 30%;
-            height: 160vh;
+            width: 80%;
+            height: auto;
+            max-height: 80%;
             border: 2px solid #ccc;
             background-color: #f8f8f8;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            aspect-ratio: 16 / 9; /* Define a proporção do vídeo */
         }
     </style>
 </head>
 
 <body>
 
-    <div id="camera">Camera feed will appear here</div>
+    <div id="camera">O feed da câmera aparecerá aqui</div>
 
     <script src="quagga.min.js"></script>
 
@@ -41,22 +43,29 @@
             inputStream: {
                 name: "Live",
                 type: "LiveStream",
-                target: document.querySelector('#camera')    // Or '#yourElement' (optional)
+                target: document.querySelector('#camera'),
+                constraints: {
+                    width: { min: 640, ideal: 1280, max: 1920 },
+                    height: { min: 480, ideal: 720, max: 1080 },
+                    facingMode: "environment" // "user" para a câmera frontal
+                },
+                singleChannel: false // Configura para escala de cinza se necessário
             },
             decoder: {
                 readers: ["code_128_reader"]
             }
-        }, function (err) {
+        }, function(err) {
             if (err) {
                 console.log(err);
                 return;
             }
-            console.log("Initialization finished. Ready to start");
+            console.log("Inicialização concluída. Pronto para começar");
             Quagga.start();
         });
 
-        Quagga.onDetected(function (data) {
+        Quagga.onDetected(function(data) {
             console.log(data.codeResult.code);
+            alert("Código de Barras Detectado: " + data.codeResult.code);
         });
     </script>
 
